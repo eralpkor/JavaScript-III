@@ -65,13 +65,44 @@ Humanoid.prototype.greet = function() {
   return `${this.name} offers a greeting in ${this.language}.`
 }
 
-// Humanoid.prototype = Object.create();
  
 /*
   * Inheritance chain: GameObject -> CharacterStats -> Humanoid
   * Instances of Humanoid should have all of the same properties as CharacterStats and GameObject.
   * Instances of CharacterStats should have all of the same properties as GameObject.
 */
+ // Stretch task: 
+ function Villian(params) {
+   Humanoid.call(this, params);
+   this.crush = params.crush;
+ }
+
+ Villian.prototype = Object.create(Humanoid.prototype);
+
+ Villian.prototype.attack = function (params) {
+   params.healthPoints -= 10;
+   if (params.healthPoints > 0) {
+     return `${this.name} attacks ${params.name} with ${this.crush}! \n ${params.takeDamage()} \n Health points: ${params.healthPoints}`
+   } else if (params.healthPoints <= 0) {
+     return `${params.destroy()}`;
+   }
+ }
+
+ function Hero(params) {
+   Humanoid.call(this, params);
+   this.crush = params.crush;
+ }
+
+ Hero.prototype = Object.create(Humanoid.prototype);
+
+ Hero.prototype.kickArs = function (params) {
+  params.healthPoints -= 10;
+  if (params.healthPoints > 0) {
+    return `${this.name} attacks ${params.name} with ${this.crush}! \n ${params.takeDamage()} \n Health points: ${params.healthPoints}`
+  } else if (params.healthPoints <= 0) {
+    return `${params.destroy()}`;
+  }
+ }
 
 // Test you work by un-commenting these 3 objects and the list of console logs below:
 
@@ -99,7 +130,7 @@ Humanoid.prototype.greet = function() {
       width: 2,
       height: 2,
     },
-    healthPoints: 15,
+    healthPoints: 20,
     name: 'Sir Mustachio',
     team: 'The Round Table',
     weapons: [
@@ -116,7 +147,7 @@ Humanoid.prototype.greet = function() {
       width: 2,
       height: 4,
     },
-    healthPoints: 10,
+    healthPoints:30,
     name: 'Lilith',
     team: 'Forest Kingdom',
     weapons: [
@@ -124,6 +155,38 @@ Humanoid.prototype.greet = function() {
       'Dagger',
     ],
     language: 'Elvish',
+  });
+
+  const badGuy = new Villian({
+    createdAt: new Date(),
+    dimensions: {
+      length: 90,
+      width: 70,
+      height: 1,
+    },
+    healthPoints: 50,
+    name: 'Do It My Way',
+    team: 'Z-Team',
+    weapons: [
+      'Knife',
+      'Sword',
+    ],
+    language: 'Demon'
+  });
+  
+  const goodGuy = new Hero({
+    createdAt: new Date(),
+    dimensions: {
+      length: 5,
+      width: 2,
+      height: 200
+    },
+    healthPoints: 25,
+    name: "Norman",
+    team: "A-Team",
+    weapons: ["Axe",
+             "Smart"],
+    language: "English"
   });
 
 
@@ -140,6 +203,8 @@ Humanoid.prototype.greet = function() {
 
 
   // Stretch task: 
+  console.log(badGuy.attack(archer));// villian 
+  console.log(goodGuy.kickArs(archer)); //hero 
   // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
   // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
